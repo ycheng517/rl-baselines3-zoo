@@ -108,6 +108,13 @@ if __name__ == "__main__":  # noqa: C901
         help="Overwrite hyperparameter (e.g. learning_rate:0.01 train_freq:10)",
     )
     parser.add_argument("-uuid", "--uuid", action="store_true", default=False, help="Ensure that the run has a unique ID")
+    parser.add_argument("--wandb", action="store_true", help="use wandb to log outputs")
+    parser.add_argument(
+        "--wandb-project-name",
+        type=str,
+        default="rl-experiments",
+        help="the wandb's project name",
+    )
     args = parser.parse_args()
 
     # Going through custom gym packages to let them register in the global registory
@@ -180,6 +187,21 @@ if __name__ == "__main__":  # noqa: C901
         n_eval_envs=args.n_eval_envs,
         no_optim_plots=args.no_optim_plots,
     )
+
+    if args.wandb:
+        import wandb
+
+        experiment_name =  f"{args.algo}_" + os.path.basename(os.path.normpath(exp_manager.save_path))
+        hyperparams, _ = exp_manager.read_hyperparameters()
+        config_dict = args.copy()
+        config_dict.update(hyperparams)
+
+        wandb.init(
+            project=args.wandb_project_name,
+            name=experiment_name,
+            config=vars(args),
+            sync_tensorboard=True,
+        )
 
     # Prepare experiment and launch hyperparameter optimization if needed
     model = exp_manager.setup_experiment()
