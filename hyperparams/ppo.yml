@@ -348,7 +348,6 @@ FetchReach-v1:
   env_wrapper: sb3_contrib.common.wrappers.TimeFeatureWrapper
   n_timesteps: !!float 20000
   policy: 'MultiInputPolicy'
-  buffer_size: 1000000
   ent_coef: 'auto'
   batch_size: 256
   gamma: 0.95
