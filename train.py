@@ -112,7 +112,7 @@ if __name__ == "__main__":  # noqa: C901
     parser.add_argument(
         "--wandb-project-name",
         type=str,
-        default="rl-experiments",
+        default="rl-baselines3-zoo",
         help="the wandb's project name",
     )
     args = parser.parse_args()
@@ -193,13 +193,13 @@ if __name__ == "__main__":  # noqa: C901
 
         experiment_name =  f"{args.algo}_" + os.path.basename(os.path.normpath(exp_manager.save_path))
         hyperparams, _ = exp_manager.read_hyperparameters()
-        config_dict = args.copy()
+        config_dict = vars(args)
         config_dict.update(hyperparams)
 
         wandb.init(
             project=args.wandb_project_name,
             name=experiment_name,
-            config=vars(args),
+            config=config_dict,
             sync_tensorboard=True,
         )
 
