@@ -356,9 +356,15 @@ FetchReach-v1: &fetch-defaults
 
 FetchPush-v1:
   <<: *fetch-defaults
+  n_timesteps: !!float 3e6
+  policy_kwargs: "dict(net_arch=[dict(pi=[256, 256], vf=[256, 256])])"
 
 FetchSlide-v1:
   <<: *fetch-defaults
+  n_timesteps: !!float 5e6
+  policy_kwargs: "dict(net_arch=[dict(pi=[256, 256], vf=[256, 256])])"
 
 FetchPickAndPlace-v1:
   <<: *fetch-defaults
+  n_timesteps: !!float 3e6
+  policy_kwargs: "dict(net_arch=[dict(pi=[256, 256], vf=[256, 256])])"
