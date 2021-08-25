@@ -344,12 +344,21 @@ CarRacing-v0:
                        ortho_init=False,
                        )"
 
-FetchReach-v1:
+FetchReach-v1: &fetch-defaults
   env_wrapper: sb3_contrib.common.wrappers.TimeFeatureWrapper
-  n_timesteps: !!float 20000
+  n_timesteps: !!float 1e6
   policy: 'MultiInputPolicy'
   ent_coef: 0.01
   batch_size: 256
   gamma: 0.95
   learning_rate: 0.001
   normalize: True
+
+FetchPush-v1:
+  <<: *fetch-defaults
+
+FetchSlide-v1:
+  <<: *fetch-defaults
+
+FetchPickAndPlace-v1:
+  <<: *fetch-defaults
