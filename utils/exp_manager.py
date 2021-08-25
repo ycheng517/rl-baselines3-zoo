@@ -131,7 +131,6 @@ class ExperimentManager(object):
 
         # Logging
         self.log_folder = log_folder
-        self.tensorboard_log = None if tensorboard_log == "" else os.path.join(tensorboard_log, env_id)
         self.verbose = verbose
         self.args = args
         self.log_interval = log_interval
@@ -139,8 +138,9 @@ class ExperimentManager(object):
 
         self.log_path = f"{log_folder}/{self.algo}/"
         self.save_path = os.path.join(
-            self.log_path, f"{self.env_id}_{get_latest_run_id(self.log_path, self.env_id) + 1}{uuid_str}"
+            self.log_path, f"{self.env_id}_{int(time.time())}{uuid_str}"
         )
+        self.tensorboard_log = None if tensorboard_log == "" else os.path.join(self.save_path, tensorboard_log)
         self.params_path = f"{self.save_path}/{self.env_id}"
 
     def setup_experiment(self) -> Optional[BaseAlgorithm]:
