@@ -108,6 +108,12 @@ if __name__ == "__main__":  # noqa: C901
         help="Overwrite hyperparameter (e.g. learning_rate:0.01 train_freq:10)",
     )
     parser.add_argument("-uuid", "--uuid", action="store_true", default=False, help="Ensure that the run has a unique ID")
+    parser.add_argument(
+        "--hyperparam-file-name", 
+        type=str,
+        default="",
+        help="hyperparam file name to load, defaults to algorithm name"
+    )
     parser.add_argument("--wandb", action="store_true", help="use wandb to log outputs")
     parser.add_argument(
         "--wandb-project-name",
@@ -186,12 +192,14 @@ if __name__ == "__main__":  # noqa: C901
         vec_env_type=args.vec_env,
         n_eval_envs=args.n_eval_envs,
         no_optim_plots=args.no_optim_plots,
+        hyperparam_file_name=args.hyperparam_file_name
     )
 
     if args.wandb:
         import wandb
 
-        experiment_name =  f"{args.algo}_" + os.path.basename(os.path.normpath(exp_manager.save_path))
+        prefix = args.hyperparam_file_name if args.hyperparam_file_name else args.algo
+        experiment_name =  f"{prefix}_" + os.path.basename(os.path.normpath(exp_manager.save_path))
         hyperparams, _ = exp_manager.read_hyperparameters()
         config_dict = vars(args)
         config_dict.update(hyperparams)

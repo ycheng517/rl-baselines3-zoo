@@ -78,6 +78,7 @@ class ExperimentManager(object):
         vec_env_type: str = "dummy",
         n_eval_envs: int = 1,
         no_optim_plots: bool = False,
+        hyperparam_file_name = "",
     ):
         super(ExperimentManager, self).__init__()
         self.algo = algo
@@ -142,6 +143,7 @@ class ExperimentManager(object):
         )
         self.tensorboard_log = None if tensorboard_log == "" else os.path.join(self.save_path, tensorboard_log)
         self.params_path = f"{self.save_path}/{self.env_id}"
+        self.hyperparam_file_name = hyperparam_file_name
 
     def setup_experiment(self) -> Optional[BaseAlgorithm]:
         """
@@ -238,15 +240,16 @@ class ExperimentManager(object):
         print(f"Log path: {self.save_path}")
 
     def read_hyperparameters(self) -> Tuple[Dict[str, Any], Dict[str, Any]]:
+        fn = self.hyperparam_file_name if self.hyperparam_file_name else self.algo
         # Load hyperparameters from yaml file
-        with open(f"hyperparams/{self.algo}.yml", "r") as f:
+        with open(f"hyperparams/{fn}.yml", "r") as f:
             hyperparams_dict = yaml.safe_load(f)
             if self.env_id in list(hyperparams_dict.keys()):
                 hyperparams = hyperparams_dict[self.env_id]
             elif self._is_atari:
                 hyperparams = hyperparams_dict["atari"]
             else:
-                raise ValueError(f"Hyperparameters not found for {self.algo}-{self.env_id}")
+                raise ValueError(f"Hyperparameters not found for {fn}-{self.env_id}")
 
         if self.custom_hyperparams is not None:
             # Overwrite hyperparams if needed

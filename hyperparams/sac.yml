@@ -192,7 +192,7 @@ CarRacing-v0:
 # === Robotics GoalEnvs ===
 
 FetchReach-v1: &fetch-defaults
-  n_timesteps: !!float 20000
+  n_timesteps: !!float 1e5
   policy: 'MultiInputPolicy'
   buffer_size: 1000000
   ent_coef: 'auto'
