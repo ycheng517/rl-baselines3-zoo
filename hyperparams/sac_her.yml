@@ -18,15 +18,15 @@ FetchReach-v1: &fetch-defaults
 
 FetchPush-v1:
   <<: *fetch-defaults
-  n_timesteps: !!float 1e6
+  n_timesteps: !!float 5e6
   policy_kwargs: "dict(net_arch=[512, 512])"
 
 FetchSlide-v1:
   <<: *fetch-defaults
-  n_timesteps: !!float 1e6
+  n_timesteps: !!float 5e6
   policy_kwargs: "dict(net_arch=[512, 512])"
 
 FetchPickAndPlace-v1:
   <<: *fetch-defaults
-  n_timesteps: !!float 1e6
+  n_timesteps: !!float 5e6
   policy_kwargs: "dict(net_arch=[512, 512])"
