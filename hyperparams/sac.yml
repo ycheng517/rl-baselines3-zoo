@@ -218,6 +218,21 @@ FetchPickAndPlace-v1:
   n_timesteps: !!float 3e6
   policy_kwargs: "dict(net_arch=[400, 300])"
 
+FetchReach-v1-pixel:
+  env_wrapper:
+    - robotic_manipulation_gym.wrappers.fetch.FetchEnvWrapper:
+        cameras: [8, 10]
+        channels_first: False
+  n_timesteps: !!float 1e4
+  policy: 'CnnPolicy'
+  buffer_size: 10000
+  ent_coef: 0.01
+  gamma: 0.95
+  learning_rate: 0.001
+  learning_starts: 1000
+  frame_stack: 4
+  # normalize: True
+
 # ==== Custom Envs ===
 
 donkey-generated-track-v0:

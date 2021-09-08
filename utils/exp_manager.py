@@ -78,7 +78,7 @@ class ExperimentManager(object):
         vec_env_type: str = "dummy",
         n_eval_envs: int = 1,
         no_optim_plots: bool = False,
-        hyperparam_file_name = "",
+        hyperparam_key = "",
     ):
         super(ExperimentManager, self).__init__()
         self.algo = algo
@@ -93,6 +93,9 @@ class ExperimentManager(object):
         self.frame_stack = None
         self.seed = seed
         self.optimization_log_path = optimization_log_path
+        if not hyperparam_key:
+            hyperparam_key = self.algo
+        self.hyperparam_key = hyperparam_key
 
         self.vec_env_class = {"dummy": DummyVecEnv, "subproc": SubprocVecEnv}[vec_env_type]
 
@@ -139,11 +142,11 @@ class ExperimentManager(object):
 
         self.log_path = f"{log_folder}/{self.algo}/"
         self.save_path = os.path.join(
-            self.log_path, f"{self.env_id}_{int(time.time())}{uuid_str}"
+            # self.log_path, f"{self.hyperparam_key}_{int(time.time())}{uuid_str}"
+            self.log_path, f"{self.hyperparam_key}_{get_latest_run_id(self.hyperparam_key, self.env_id) + 1}{uuid_str}"
         )
         self.tensorboard_log = None if tensorboard_log == "" else os.path.join(self.save_path, tensorboard_log)
         self.params_path = f"{self.save_path}/{self.env_id}"
-        self.hyperparam_file_name = hyperparam_file_name
 
     def setup_experiment(self) -> Optional[BaseAlgorithm]:
         """
@@ -240,16 +243,15 @@ class ExperimentManager(object):
         print(f"Log path: {self.save_path}")
 
     def read_hyperparameters(self) -> Tuple[Dict[str, Any], Dict[str, Any]]:
-        fn = self.hyperparam_file_name if self.hyperparam_file_name else self.algo
         # Load hyperparameters from yaml file
-        with open(f"hyperparams/{fn}.yml", "r") as f:
+        with open(f"hyperparams/{self.algo}.yml", "r") as f:
             hyperparams_dict = yaml.safe_load(f)
-            if self.env_id in list(hyperparams_dict.keys()):
-                hyperparams = hyperparams_dict[self.env_id]
+            if self.hyperparam_key in list(hyperparams_dict.keys()):
+                hyperparams = hyperparams_dict[self.hyperparam_key]
             elif self._is_atari:
                 hyperparams = hyperparams_dict["atari"]
             else:
-                raise ValueError(f"Hyperparameters not found for {fn}-{self.env_id}")
+                raise ValueError(f"Hyperparameters not found for {self.algo}-{self.hyperparam_key}")
 
         if self.custom_hyperparams is not None:
             # Overwrite hyperparams if needed
