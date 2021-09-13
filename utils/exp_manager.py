@@ -94,7 +94,7 @@ class ExperimentManager(object):
         self.seed = seed
         self.optimization_log_path = optimization_log_path
         if not hyperparam_key:
-            hyperparam_key = self.algo
+            hyperparam_key = self.env_id
         self.hyperparam_key = hyperparam_key
 
         self.vec_env_class = {"dummy": DummyVecEnv, "subproc": SubprocVecEnv}[vec_env_type]
@@ -143,7 +143,7 @@ class ExperimentManager(object):
         self.log_path = f"{log_folder}/{self.algo}/"
         self.save_path = os.path.join(
             # self.log_path, f"{self.hyperparam_key}_{int(time.time())}{uuid_str}"
-            self.log_path, f"{self.hyperparam_key}_{get_latest_run_id(self.hyperparam_key, self.env_id) + 1}{uuid_str}"
+            self.log_path, f"{self.hyperparam_key}_{get_latest_run_id(self.log_path, self.hyperparam_key) + 1}{uuid_str}"
         )
         self.tensorboard_log = None if tensorboard_log == "" else os.path.join(self.save_path, tensorboard_log)
         self.params_path = f"{self.save_path}/{self.env_id}"
