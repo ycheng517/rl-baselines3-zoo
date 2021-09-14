@@ -60,6 +60,7 @@ def main():  # noqa: C901
     parser.add_argument(
         "--env-kwargs", type=str, nargs="+", action=StoreDict, help="Optional keyword argument to pass to the env constructor"
     )
+    parser.add_argument("--log-path", type=str, help="log path containing saved models", default="")
     args = parser.parse_args()
 
     # Going through custom gym packages to let them register in the global registory
@@ -75,7 +76,9 @@ def main():  # noqa: C901
         print(f"Loading latest experiment, id={args.exp_id}")
 
     # Sanity checks
-    if args.exp_id > 0:
+    if args.log_path:
+        log_path = args.log_path
+    elif args.exp_id > 0:
         log_path = os.path.join(folder, algo, f"{env_id}_{args.exp_id}")
     else:
         log_path = os.path.join(folder, algo)

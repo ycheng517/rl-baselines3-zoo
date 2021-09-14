@@ -28,6 +28,7 @@ if __name__ == "__main__":
         type=int,
         help="Load checkpoint instead of last model if available, you must pass the number of timesteps corresponding to it",
     )
+    parser.add_argument("--log-path", type=str, help="log path containing saved models", default="")
     args = parser.parse_args()
 
     env_id = args.env
@@ -45,7 +46,9 @@ if __name__ == "__main__":
         args.exp_id = get_latest_run_id(os.path.join(folder, algo), env_id)
         print(f"Loading latest experiment, id={args.exp_id}")
     # Sanity checks
-    if args.exp_id > 0:
+    if args.log_path:
+        log_path = args.log_path
+    elif args.exp_id > 0:
         log_path = os.path.join(folder, algo, f"{env_id}_{args.exp_id}")
     else:
         log_path = os.path.join(folder, algo)

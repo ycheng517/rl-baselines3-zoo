@@ -199,7 +199,7 @@ if __name__ == "__main__":  # noqa: C901
         import wandb
 
         prefix = args.hyperparam_key if args.hyperparam_key else args.algo
-        experiment_name =  f"{prefix}_" + os.path.basename(os.path.normpath(exp_manager.save_path))
+        experiment_name =  os.path.basename(os.path.normpath(exp_manager.save_path))
         hyperparams, _ = exp_manager.read_hyperparameters()
         config_dict = vars(args)
         config_dict.update(hyperparams)

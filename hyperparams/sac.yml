@@ -225,7 +225,7 @@ FetchReach-v1-pixel:
         channels_first: False
   n_timesteps: !!float 1e6
   policy: 'CnnPolicy'
-  buffer_size: 25000
+  buffer_size: 30000
   ent_coef: 0.02
   gamma: 0.95
   learning_rate: 2.5e-4
@@ -239,7 +239,7 @@ FetchReachDense-v1-pixel:
         channels_first: False
   n_timesteps: !!float 1e6
   policy: 'CnnPolicy'
-  buffer_size: 25000
+  buffer_size: 30000
   ent_coef: 0.02
   gamma: 0.95
   learning_rate: 2.5e-4
