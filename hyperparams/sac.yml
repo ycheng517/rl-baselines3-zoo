@@ -203,6 +203,18 @@ FetchReach-v1: &fetch-defaults
   normalize: True
   policy_kwargs: "dict(net_arch=[64, 64])"
 
+FetchReachDense-v1:
+  <<: *fetch-defaults
+
+FetchReachDense-v1-her:
+  <<: *fetch-defaults
+  replay_buffer_class: HerReplayBuffer
+  replay_buffer_kwargs: "dict(
+    online_sampling=True,
+    goal_selection_strategy='future',
+    n_sampled_goal=4
+  )"
+
 FetchPush-v1:
   <<: *fetch-defaults
   n_timesteps: !!float 3e6
